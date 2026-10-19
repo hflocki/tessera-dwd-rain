@@ -1,0 +1,31 @@
+{
+  "_meta": {
+    "name": "English"
+  },
+  "screen": {
+    "rain": "Rain",
+    "decimal": ".",
+    "choose": "Choose the forecast sensor",
+    "unavailable": "No forecast right now",
+    "dry": "No rain in the next two hours",
+    "soon": "Rain starts in {in}",
+    "soon_for": "Rain in {in}, for {for}",
+    "until": "Raining for another {in}",
+    "long": "Raining for at least two more hours",
+    "min": "{n} min",
+    "hours": "1 h | {n} h",
+    "now": "Now",
+    "in_1h": "+1 h",
+    "in_2h": "+2 h"
+  },
+  "app": {
+    "name": "Rain (DWD)",
+    "summary": "When it rains in the next two hours and for how long, from the DWD radar forecast.",
+    "tile_name": "Rain",
+    "tile_example": "Rain in 25 min, for 20 min",
+    "chart": "Show the chart",
+    "chart_hint": "The forecast of the next two hours as bars under the words, where there is room.",
+    "step": "Forecast step",
+    "step_hint": "Minutes between two values of the sensor's forecast; 5 for the DWD nowcast."
+  }
+}

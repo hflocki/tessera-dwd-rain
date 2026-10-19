@@ -1,0 +1,31 @@
+{
+  "_meta": {
+    "name": "Deutsch"
+  },
+  "screen": {
+    "rain": "Regen",
+    "decimal": ",",
+    "choose": "Vorhersage-Sensor wählen",
+    "unavailable": "Gerade keine Vorhersage",
+    "dry": "Kein Regen in den nächsten 2 Stunden",
+    "soon": "In {in} beginnt es zu regnen",
+    "soon_for": "In {in} regnet es für {for}",
+    "until": "Es regnet noch {in}",
+    "long": "Es regnet noch mindestens 2 Stunden",
+    "min": "{n} Min.",
+    "hours": "1 Std. | {n} Std.",
+    "now": "Jetzt",
+    "in_1h": "+1 Std.",
+    "in_2h": "+2 Std."
+  },
+  "app": {
+    "name": "Regen (DWD)",
+    "summary": "Ob und wann es in den nächsten zwei Stunden regnet und wie lange, aus der DWD-Radarvorhersage.",
+    "tile_name": "Regen",
+    "tile_example": "In 25 Min. regnet es für 20 Min.",
+    "chart": "Diagramm anzeigen",
+    "chart_hint": "Die Vorhersage der nächsten zwei Stunden als Balken unter dem Text, wenn Platz ist.",
+    "step": "Vorhersage-Schritt",
+    "step_hint": "Minuten zwischen zwei Werten der Vorhersage des Sensors; 5 beim DWD-Nowcast."
+  }
+}

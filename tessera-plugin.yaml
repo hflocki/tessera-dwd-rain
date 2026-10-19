@@ -1,0 +1,36 @@
+# Rain in the next two hours from a DWD precipitation forecast sensor in Home Assistant: when it starts, how long it
+# lasts, and the forecast in five-minute steps as a small chart. Every field is explained in docs/MANIFEST.md of
+# tessera-plugins.
+id: dwd_rain
+version: 1.0.0
+# 0.5: a tile's fields; 0.9: Tone::GOOD, ui::set_fill and one-line labels.
+api: "0.9"
+icon: weather-rainy
+maintainer: hflocki
+license: MIT
+stage: beta
+topics: [weather]
+requires:
+  esphome: 2026.6.2
+boards: any
+flash_kb: 10
+
+tiles:
+  - id: rain
+    name: tile_name
+    icon: weather-rainy
+    sizes: { min: 2x1, max: 6x2 }
+    # The icon in its circle, two lines of words, the rain now, 24 bars of the chart and three time labels.
+    memory: 3400
+    # The DWD precipitation forecast sensor (its state the rain now in mm/h). Only sensors with a forecast are offered.
+    domains: [sensor]
+    has_attributes: [forecast]
+    fields:
+      start: { path: next_start, as: epoch }
+      end: { path: next_end, as: epoch }
+      minutes: { path: next_length, as: number }
+      rain: { path: "forecast[*]", as: numbers }
+    example: tile_example
+    options:
+      - { id: chart, kind: toggle, default: true, label: chart, hint: chart_hint }
+      - { id: step, kind: number, min: 1, max: 15, step: 1, unit: min, default: 5, label: step, hint: step_hint }

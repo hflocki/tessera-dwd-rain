@@ -1,0 +1,27 @@
+# What tools/preview.py shows (docs/PREVIEW.md): a made-up DWD precipitation forecast sensor, rain from in 25 minutes
+# for 20 minutes, and one that stays dry.
+tiles:
+  - tile: rain
+    name: Regen
+    entity: sensor.dwd_precipitation_forecast_home
+  - tile: rain
+    name: Dry
+    entity: sensor.dry_forecast
+    sizes: [2x1]
+
+states:
+  sensor.dwd_precipitation_forecast_home:
+    state: "0"
+    attributes:
+      friendly_name: DWD precipitation forecast
+      next_start: "{now+25m}"
+      next_end: "{now+45m}"
+      next_length: 20
+      forecast: { "{now}": 0, "{now+5m}": 0, "{now+10m}": 0, "{now+15m}": 0, "{now+20m}": 0, "{now+25m}": 0.4,
+                  "{now+30m}": 1.6, "{now+35m}": 3.2, "{now+40m}": 0.8, "{now+45m}": 0, "{now+50m}": 0,
+                  "{now+55m}": 0, "{now+60m}": 0, "{now+65m}": 0.2, "{now+70m}": 0, "{now+75m}": 0, "{now+80m}": 0,
+                  "{now+85m}": 0, "{now+90m}": 0, "{now+95m}": 0, "{now+100m}": 0, "{now+105m}": 0, "{now+110m}": 0,
+                  "{now+115m}": 0 }
+  sensor.dry_forecast:
+    state: "0"
+    attributes: { friendly_name: Dry, next_start: null, next_end: null, next_length: null, forecast: { "{now}": 0 } }
