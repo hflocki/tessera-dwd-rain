@@ -20,6 +20,11 @@ static void place(lv_obj_t *obj, int x, int y, int w, int h) {
   lv_obj_set_pos(obj, x, y);
 }
 
+// An object's opacity or fill opacity, written only when it differs: a write redraws the object, so not on every tick.
+static void set_opa(lv_obj_t *obj, lv_opa_t opa) {
+  if (lv_obj_get_style_opa(obj, LV_PART_MAIN) != opa) lv_obj_set_style_opa(obj, opa, 0);
+}
+
 // The colour of a rain rate in mm/h: light rain the screen's blue, heavy rain purple, a downpour red.
 static theme::Role rain_role(float mm) {
   if (mm >= 10.0f) return theme::MARK_PURPLE;
@@ -212,7 +217,7 @@ class RainTile : public tessera::Tile {
     for (int i = 0; i < bars_; ++i) {
       const float mm = i < count_ ? rain_[i] : 0.0f;
       const int h = mm > 0 ? std::max(ui::px(3), static_cast<int>(room * std::min(1.0f, sqrtf(mm / 8.0f)))) : 0;
-      lv_obj_set_style_opa(bar_[i], h > 0 ? LV_OPA_COVER : LV_OPA_TRANSP, 0);
+      set_opa(bar_[i], h > 0 ? LV_OPA_COVER : LV_OPA_TRANSP);
       place(bar_[i], text_x_ + i * (bar_w_ + bar_gap_), chart_y_ + room - h, bar_w_, std::max(1, h));
       ui::set_fill(bar_[i], tessera::Tone::NORMAL, rain_role(mm));
     }
