@@ -7,7 +7,7 @@ tiles:
   - tile: rain
     name: Dry
     entity: sensor.dry_forecast
-    sizes: [2x1]
+    sizes: [1x1, 2x1, 3x2]
 
 states:
   sensor.dwd_precipitation_forecast_home:

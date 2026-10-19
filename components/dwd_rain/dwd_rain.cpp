@@ -43,6 +43,12 @@ class RainTile : public tessera::Tile {
     line_h_ = ui::line_height(Font::BODY_LARGE);
     body_h_ = ui::line_height(Font::BODY);
     gap_ = ui::px(ui::large() ? 8 : 4);
+    // A narrow tile (1 column): the circle on top and the sentence under it in two lines, no chart.
+    compact_ = width_ < ui::text_width("00,0 mm/h", Font::BODY) * 3;
+    if (compact_) {
+      create_compact(c);
+      return;
+    }
     const int text_h = title_h_ + line_h_;
     // The chart under the words when there is room for at least a little of it.
     const int chart_room = height_ - text_h - gap_ - body_h_;
@@ -96,6 +102,24 @@ class RainTile : public tessera::Tile {
     }
   }
 
+  void create_compact(const tessera::TileContext &c) {
+    chart_ = false;
+    const int text_h = 2 * body_h_;
+    dia_ = std::min(ui::mm(13), std::max(ui::line_height(Font::ICON), height_ - text_h - gap_));
+    dia_ = std::max(1, std::min(dia_, width_));
+    top_ = std::max(0, (height_ - dia_ - gap_ - text_h) / 2);
+    circle_ = ui::block(c.parent, theme::TRACK);
+    lv_obj_set_style_radius(circle_, LV_RADIUS_CIRCLE, 0);
+    place(circle_, (width_ - dia_) / 2, top_, dia_, dia_);
+    icon_ = ui::label(c.parent, Font::ICON, theme::MUTED);
+    lv_obj_set_style_text_align(icon_, LV_TEXT_ALIGN_CENTER, 0);
+    const int ih = ui::line_height(Font::ICON);
+    place(icon_, (width_ - dia_) / 2, top_ + (dia_ - ih) / 2, dia_, ih);
+    line_ = ui::text(c.parent, Font::BODY, theme::INK_SOFT);
+    lv_obj_set_style_text_align(line_, LV_TEXT_ALIGN_CENTER, 0);
+    place(line_, 0, top_ + dia_ + gap_, width_, text_h);
+  }
+
   void on_state(JsonObjectConst data) override {
     const char *state = data["state"] | "";
     have_entity_ = !data["state"].isNull();
@@ -139,10 +163,12 @@ class RainTile : public tessera::Tile {
       line = plugin_->text("dry");
     }
 
-    ui::set_text(title_, name_);
-    ui::set_color(title_, theme::INK);
     ui::set_text(line_, line);
     ui::set_color(line_, theme::INK_SOFT);
+    if (title_) {
+      ui::set_text(title_, name_);
+      ui::set_color(title_, theme::INK);
+    }
     char rate[24] = "";
     if (now_rate_ > 0) {
       snprintf(rate, sizeof rate, "%.1f mm/h", now_rate_);
@@ -150,8 +176,10 @@ class RainTile : public tessera::Tile {
         for (char *p = rate; *p; ++p)
           if (*p == '.') *p = *d;
     }
-    ui::set_text(now_, rate);
-    ui::set_color(now_, theme::MUTED);
+    if (now_) {
+      ui::set_text(now_, rate);
+      ui::set_color(now_, theme::MUTED);
+    }
 
     // The icon: pouring while it rains hard, blue in its circle while it rains or will within the hour.
     ui::set_text(icon_, ui::icon(now_rate_ >= 2.5f ? POURING : RAINY));
@@ -194,7 +222,7 @@ class RainTile : public tessera::Tile {
   char name_[48]{};
   int width_ = 0, height_ = 0, title_h_ = 0, line_h_ = 0, body_h_ = 0, gap_ = 0, top_ = 0, dia_ = 0;
   int text_x_ = 0, now_w_ = 0, chart_h_ = 0, chart_y_ = 0, bars_ = 0, bar_w_ = 0, bar_gap_ = 0, step_ = 5;
-  bool chart_ = true, have_entity_ = false, unavailable_ = false;
+  bool chart_ = true, compact_ = false, have_entity_ = false, unavailable_ = false;
   uint32_t start_ = 0, end_ = 0;
   float minutes_ = 0, now_rate_ = 0;
   float rain_[MAX_BARS]{};
