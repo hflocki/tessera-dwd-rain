@@ -25,6 +25,18 @@ static void set_opa(lv_obj_t *obj, lv_opa_t opa) {
   if (lv_obj_get_style_opa(obj, LV_PART_MAIN) != opa) lv_obj_set_style_opa(obj, opa, 0);
 }
 
+static void set_bg_opa(lv_obj_t *obj, lv_opa_t opa) {
+  if (lv_obj_get_style_bg_opa(obj, LV_PART_MAIN) != opa) lv_obj_set_style_bg_opa(obj, opa, 0);
+}
+
+// A label inside a circle: a child of it, so the two are one part, centred in it.
+static void inside(lv_obj_t *circle, lv_obj_t *label, int w, int h, int dy = 0) {
+  lv_obj_set_style_pad_all(circle, 0, 0);
+  lv_obj_remove_flag(circle, LV_OBJ_FLAG_SCROLLABLE);
+  lv_obj_set_size(label, std::max(1, w), std::max(1, h));
+  lv_obj_align(label, LV_ALIGN_CENTER, 0, dy);
+}
+
 // The colour of a rain rate in mm/h: light rain the screen's blue, heavy rain purple, a downpour red.
 static theme::Role rain_role(float mm) {
   if (mm >= 10.0f) return theme::MARK_PURPLE;
@@ -66,10 +78,10 @@ class RainTile : public tessera::Tile {
     circle_ = ui::block(c.parent, theme::TRACK);
     lv_obj_set_style_radius(circle_, LV_RADIUS_CIRCLE, 0);
     place(circle_, 0, top_ + (text_h - dia_) / 2, dia_, dia_);
-    icon_ = ui::label(c.parent, Font::ICON, theme::MUTED);
+    icon_ = ui::label(circle_, Font::ICON, theme::MUTED);
     lv_obj_set_style_text_align(icon_, LV_TEXT_ALIGN_CENTER, 0);
     const int ih = ui::line_height(Font::ICON);
-    place(icon_, 0, top_ + (text_h - ih) / 2, dia_, ih);
+    inside(circle_, icon_, dia_, ih);
 
     text_x_ = dia_ + ui::px(12);
     const int text_w = width_ - text_x_;
@@ -116,10 +128,10 @@ class RainTile : public tessera::Tile {
     circle_ = ui::block(c.parent, theme::TRACK);
     lv_obj_set_style_radius(circle_, LV_RADIUS_CIRCLE, 0);
     place(circle_, (width_ - dia_) / 2, top_, dia_, dia_);
-    icon_ = ui::label(c.parent, Font::ICON, theme::MUTED);
+    icon_ = ui::label(circle_, Font::ICON, theme::MUTED);
     lv_obj_set_style_text_align(icon_, LV_TEXT_ALIGN_CENTER, 0);
     const int ih = ui::line_height(Font::ICON);
-    place(icon_, (width_ - dia_) / 2, top_ + (dia_ - ih) / 2, dia_, ih);
+    inside(circle_, icon_, dia_, ih);
     line_ = ui::text(c.parent, Font::BODY, theme::INK_SOFT);
     lv_obj_set_style_text_align(line_, LV_TEXT_ALIGN_CENTER, 0);
     place(line_, 0, top_ + dia_ + gap_, width_, text_h);
@@ -190,6 +202,8 @@ class RainTile : public tessera::Tile {
     ui::set_text(icon_, ui::icon(now_rate_ >= 2.5f ? POURING : RAINY));
     ui::set_color(icon_, wet ? theme::ON_ACCENT : theme::MUTED);
     ui::set_fill(circle_, tessera::Tone::NORMAL, wet ? theme::ACCENT : theme::TRACK);
+    // Dry, a lighter circle, so the grey icon reads on it in the light look too.
+    set_bg_opa(circle_, wet ? LV_OPA_COVER : LV_OPA_60);
 
     if (chart_) paint_chart();
   }

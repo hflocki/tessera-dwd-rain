@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.2
+- The icon sits inside its circle as one part, and an idle circle is lighter, so the grey icon reads in the light look too.
+- Amber and yellow words and icons take the ink on the light look, where they were too faint to read; the dark look keeps its colours.
+
 ## 1.1.1
 - Opacities are written only when they change, so the tile is not redrawn every second.
 
