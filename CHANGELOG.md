@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.1.3
+- On a small 1 x 1, one line of words and a smaller circle, so nothing lies under the tile's edge.
+
 ## 1.1.2
 - The icon sits inside its circle as one part, and an idle circle is lighter, so the grey icon reads in the light look too.
 - Amber and yellow words and icons take the ink on the light look, where they were too faint to read; the dark look keeps its colours.

@@ -121,21 +121,26 @@ class RainTile : public tessera::Tile {
 
   void create_compact(const tessera::TileContext &c) {
     chart_ = false;
-    const int text_h = 2 * body_h_;
-    dia_ = std::min(ui::mm(13), std::max(ui::line_height(Font::ICON), height_ - text_h - gap_));
-    dia_ = std::max(1, std::min(dia_, width_));
+    // Two lines of words under the circle where they fit with a circle for the small icon, else one; the circle takes
+    // what is left, at most 13 mm, and never more than the tile is high.
+    const int small = ui::line_height(Font::ICON_SMALL) + ui::px(6);
+    int lines = height_ - 2 * body_h_ - gap_ >= small ? 2 : 1;
+    const int text_h = lines * body_h_;
+    dia_ = std::min({ui::mm(13), width_, std::max(1, height_ - text_h - gap_)});
+    const Font icon_font = dia_ >= ui::line_height(Font::ICON) + ui::px(8) ? Font::ICON : Font::ICON_SMALL;
+    const int ih = std::min(dia_, ui::line_height(icon_font));
     top_ = std::max(0, (height_ - dia_ - gap_ - text_h) / 2);
     circle_ = ui::block(c.parent, theme::TRACK);
     lv_obj_set_style_radius(circle_, LV_RADIUS_CIRCLE, 0);
     place(circle_, (width_ - dia_) / 2, top_, dia_, dia_);
-    icon_ = ui::label(circle_, Font::ICON, theme::MUTED);
+    icon_ = ui::label(circle_, icon_font, theme::MUTED);
     lv_obj_set_style_text_align(icon_, LV_TEXT_ALIGN_CENTER, 0);
-    const int ih = ui::line_height(Font::ICON);
     inside(circle_, icon_, dia_, ih);
     line_ = ui::text(c.parent, Font::BODY, theme::INK_SOFT);
     lv_obj_set_style_text_align(line_, LV_TEXT_ALIGN_CENTER, 0);
-    place(line_, 0, top_ + dia_ + gap_, width_, text_h);
+    place(line_, 0, std::min(top_ + dia_ + gap_, height_ - text_h), width_, text_h);
   }
+
 
   void on_state(JsonObjectConst data) override {
     const char *state = data["state"] | "";
