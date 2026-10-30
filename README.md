@@ -9,7 +9,7 @@ blue, a downpour purple).
 
 ## Set up
 
-1. Have a DWD precipitation forecast sensor in Home Assistant whose attributes are `next_start`, `next_end`,
+1. Have a [DWD precipitation forecast sensor](https://github.com/stoppegp/ha-dwd-precipitation-forecast) in Home Assistant whose attributes are `next_start`, `next_end`,
    `next_length` (minutes) and `forecast` (a time and a rain rate in mm/h for every five minutes), such as
    `sensor.dwd_precipitation_forecast_home`. Its state is the rain now.
 2. In Tessera, open **Plugins**, **Add with a link**, and paste the link of this repository. Add the plugin to a
