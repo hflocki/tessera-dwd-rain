@@ -1,6 +1,6 @@
 # Rain (DWD)
 
-This use the hacs integration [DWD Precipitation Forecast]("https://github.com/stoppegp/ha-dwd-precipitation-forecast")
+This use the hacs integration [DWD Precipitation Forecast](https://github.com/stoppegp/ha-dwd-precipitation-forecast)   
 
 When it rains in the next two hours, from a DWD precipitation forecast sensor in Home Assistant: the icon in a circle
 that turns blue while it rains or will within the hour, a sentence such as "In 25 min. it rains for 20 min." or "No
