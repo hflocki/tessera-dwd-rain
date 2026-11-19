@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.1.4
+- The README links to the DWD precipitation forecast sensor the tile needs.
+
 ## 1.1.3
 - On a small 1 x 1, one line of words and a smaller circle, so nothing lies under the tile's edge.
 
